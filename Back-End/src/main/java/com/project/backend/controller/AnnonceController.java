@@ -19,13 +19,11 @@ public class AnnonceController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('Admin')")
     public List<Annonce> getAllAnnonces() {
         return annonceService.getAllAnnonces();
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('Admin')")
     public ResponseEntity<Annonce> getAnnonceById(@PathVariable Long id) {
         return annonceService.getAnnonceById(id)
                 .map(ResponseEntity::ok)
