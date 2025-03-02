@@ -33,6 +33,16 @@ public class JwtService implements UserDetailsService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    public String extractUserEmailFromToken(String token) {
+        // This method will extract the email (or username) from the token
+        return jwtUtil.extractUsername(token);
+    }
+
+    public User getUserByToken(String token) throws UsernameNotFoundException {
+        String userEmail = extractUserEmailFromToken(token);
+        return userDao.findById(userEmail).orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + userEmail));
+    }
+
     public JwtResponse createJwtToken(JwtRequest jwtRequest) throws Exception {
         String userName = jwtRequest.getUserEmail();
         String userPassword = jwtRequest.getUserPassword();
