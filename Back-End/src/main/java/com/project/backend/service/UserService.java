@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -32,6 +33,30 @@ public class UserService {
 
         user.setUserPassword(getEncodedPassword(user.getUserPassword()));
         return userDao.save(user);
+    }
+
+    // Method to update user information (only firstName, lastName, and email)
+    public User updateUserInfo(User updatedUser, String userEmail) {
+        Optional<User> userOptional = userDao.findById(userEmail);
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+
+            // Update the fields
+            if (updatedUser.getUserFirstName() != null) {
+                user.setUserFirstName(updatedUser.getUserFirstName());
+            }
+            if (updatedUser.getUserLastName() != null) {
+                user.setUserLastName(updatedUser.getUserLastName());
+            }
+            if (updatedUser.getUserEmail() != null) {
+                user.setUserEmail(updatedUser.getUserEmail());
+            }
+
+            return userDao.save(user);
+        } else {
+            throw new RuntimeException("User not found with email: " + userEmail);
+        }
     }
 
     public void initRolesAndUser(){

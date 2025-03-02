@@ -1,5 +1,6 @@
 package com.project.backend.controller;
 
+import com.project.backend.Util.JwtUtil;
 import com.project.backend.entity.User;
 import com.project.backend.service.JwtService;
 import com.project.backend.service.UserService;
@@ -17,6 +18,9 @@ public class UserController {
 
     @Autowired
     private JwtService jwtService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @PostConstruct
     public void initRolesAndUsers() {
@@ -37,6 +41,19 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.status(401).body(null); // Unauthorized
         }
+    }
+
+    @PutMapping("/updateUserInfo")
+    @PreAuthorize("hasRole('User')")
+    public User updateUserInfo(@RequestBody User updatedUser, @RequestHeader("Authorization") String token) {
+        String userEmail = extractUserEmailFromToken(token); // Extract user email from token
+        return userService.updateUserInfo(updatedUser, userEmail);
+    }
+
+
+    private String extractUserEmailFromToken(String token) {
+        // Assuming JWT utility is used to extract the email
+        return jwtUtil.extractUsername(token.replace("Bearer ", ""));
     }
 
     @PostMapping({"/registerNewUser"})
