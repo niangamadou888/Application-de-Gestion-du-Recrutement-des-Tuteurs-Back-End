@@ -13,6 +13,9 @@ public class User {
     private String userLastName;
     private String userPassword;
 
+    @Column(name = "reset_token", unique = true)
+    private String resetToken;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "USER_ROLE",
     joinColumns = {
@@ -61,5 +64,13 @@ public class User {
 
     public void setRole(Set<Role> role) {
         this.role = role;
+    }
+
+    public String getResetToken() {
+        return resetToken;
+    }
+
+    public void setResetToken(String resetToken) {
+        this.resetToken = resetToken;
     }
 }
