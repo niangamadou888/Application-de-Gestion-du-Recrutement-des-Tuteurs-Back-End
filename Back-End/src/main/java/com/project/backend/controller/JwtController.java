@@ -65,7 +65,7 @@ public class JwtController {
 
 
     @PostMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(
+    public ResponseEntity<Map<String, String>> resetPassword(
             @RequestParam("token") String token,
             @RequestBody Map<String, String> request) {
 
@@ -73,20 +73,30 @@ public class JwtController {
 
         List<User> users = userDao.findByResetToken(token);
         if (users.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token invalide.");
+            // Invalid token, return a JSON response with an error message
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Token invalide.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         } else if (users.size() > 1) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Problème de sécurité : Token en double.");
+            // Multiple users found with the same token, return an error message
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Problème de sécurité : Token en double.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
 
         User user = users.get(0);
 
-        // Hacher le mot de passe avant de l'enregistrer
+        // Hash the password before saving
         user.setUserPassword(getEncodedPassword(newPassword));
-        user.setResetToken(null); // Supprimer le token après utilisation
+        user.setResetToken(null); // Remove the token after use
         userDao.save(user);
 
-        return ResponseEntity.ok("Mot de passe réinitialisé avec succès.");
+        // Successful password reset response
+        Map<String, String> successResponse = new HashMap<>();
+        successResponse.put("message", "Mot de passe réinitialisé avec succès.");
+        return ResponseEntity.ok(successResponse);
     }
+
     public String getEncodedPassword(String password) {
         return passwordEncoder.encode(password);
     }
