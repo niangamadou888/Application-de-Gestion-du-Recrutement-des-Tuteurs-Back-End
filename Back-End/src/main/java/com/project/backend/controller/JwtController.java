@@ -52,7 +52,7 @@ public class JwtController {
         userDao.save(user);
 
         // Envoyer l'email avec un lien contenant le token
-        String resetLink = "https://recrutementtuteur.netlify.app/candidat/modifier-mdp/" + resetToken;
+        String resetLink = "https://recrutementtuteur.netlify.app/modifier-mdp/" + resetToken;
         emailService.sendEmail(user.getUserEmail(), "Réinitialisation de votre mot de passe",
                 "Cliquez sur ce lien pour réinitialiser votre mot de passe : " + resetLink);
 
