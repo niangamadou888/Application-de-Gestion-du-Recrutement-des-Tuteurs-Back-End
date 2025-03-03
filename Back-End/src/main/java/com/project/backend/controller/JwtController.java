@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -55,7 +56,10 @@ public class JwtController {
         emailService.sendEmail(user.getUserEmail(), "Réinitialisation de votre mot de passe",
                 "Cliquez sur ce lien pour réinitialiser votre mot de passe : " + resetLink);
 
-        return ResponseEntity.ok("Email de réinitialisation envoyé.");
+        // Return a JSON response instead of plain text
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Email de réinitialisation envoyé.");
+        return ResponseEntity.ok(response.toString());
     }
 
     @PostMapping("/reset-password")
