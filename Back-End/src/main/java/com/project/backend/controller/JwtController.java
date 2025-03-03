@@ -42,7 +42,7 @@ public class JwtController {
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> request) {
+    public ResponseEntity<Map<String, String>> forgotPassword(@RequestBody Map<String, String> request) {
         String userEmail = request.get("userEmail");
         User user = userDao.findByUserEmail(userEmail).orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -56,11 +56,13 @@ public class JwtController {
         emailService.sendEmail(user.getUserEmail(), "Réinitialisation de votre mot de passe",
                 "Cliquez sur ce lien pour réinitialiser votre mot de passe : " + resetLink);
 
-        // Return a JSON response instead of plain text
+        // Return a JSON response with a proper Map
         Map<String, String> response = new HashMap<>();
         response.put("message", "Email de réinitialisation envoyé.");
-        return ResponseEntity.ok(response.toString());
+
+        return ResponseEntity.ok(response); // Return as JSON automatically serialized
     }
+
 
     @PostMapping("/reset-password")
     public ResponseEntity<String> resetPassword(
