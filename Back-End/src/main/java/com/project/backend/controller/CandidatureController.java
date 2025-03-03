@@ -35,6 +35,7 @@ public class CandidatureController {
     }
 
     @PostMapping(value = "/soumettre", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasRole('User')")
     public ResponseEntity<Candidature> soumettreCandidature(
             @RequestPart("candidature") String candidatureJson,
             @RequestParam("userId") String userId,
