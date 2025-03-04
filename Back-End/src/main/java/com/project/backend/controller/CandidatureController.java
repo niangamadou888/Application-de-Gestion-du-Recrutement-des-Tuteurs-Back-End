@@ -117,4 +117,12 @@ public class CandidatureController {
         List<Candidature> candidatures = candidatureService.getCandidaturesByUserId(userId);
         return ResponseEntity.ok(candidatures);
     }
+
+    // New endpoint to get candidatures by annonceId
+    @GetMapping("/annonce/{annonceId}")
+    @PreAuthorize("hasAnyRole('Admin', 'User')")
+    public ResponseEntity<List<Candidature>> getCandidaturesByAnnonceId(@PathVariable Long annonceId) {
+        List<Candidature> candidatures = candidatureService.getCandidaturesByAnnonceId(annonceId);
+        return ResponseEntity.ok(candidatures);
+    }
 }

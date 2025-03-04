@@ -123,4 +123,9 @@ public class CandidatureService {
     public List<Candidature> getCandidaturesByUserId(String userId) {
         return candidatureRepository.findByCandidat_UserEmail(userId);
     }
+
+    // New method to get candidatures by annonceId
+    public List<Candidature> getCandidaturesByAnnonceId(Long annonceId) {
+        return candidatureRepository.findByAnnonceId(annonceId);
+    }
 }
