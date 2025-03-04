@@ -120,4 +120,7 @@ public class CandidatureService {
             }
         }
     }
+    public List<Candidature> getCandidaturesByUserId(String userId) {
+        return candidatureRepository.findByCandidat_UserEmail(userId);
+    }
 }

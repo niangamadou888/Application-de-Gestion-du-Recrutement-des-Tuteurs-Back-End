@@ -110,4 +110,11 @@ public class CandidatureController {
         return candidature.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/user/{userId}")
+    @PreAuthorize("hasAnyRole('Admin', 'User')")
+    public ResponseEntity<List<Candidature>> getCandidaturesByUser(@PathVariable String userId) {
+        List<Candidature> candidatures = candidatureService.getCandidaturesByUserId(userId);
+        return ResponseEntity.ok(candidatures);
+    }
 }

@@ -10,5 +10,5 @@ import java.util.List;
 
 @Repository
 public interface CandidatureDAO extends JpaRepository<Candidature, Long> {
-
+    List<Candidature> findByCandidat_UserEmail(String userEmail);
 }
